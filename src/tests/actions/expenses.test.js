@@ -58,13 +58,8 @@ test('should set up edit expense action object', () => {
 
 test('should edit expenses from firebase', (done) => {
     const store = createMockStore({});
-    const id = expenses[2].id;
-    const updates = {
-        amount: 123,
-        createdAt: 12345,
-        description: 'start edit expenses',
-        note: ''
-    };
+    const id = expenses[0].id;
+    const updates = {amount: 21045};
     store.dispatch(startEditExpense(id, updates)).then(() => {
         const actions = store.getActions();
         expect(actions[0]).toEqual({
@@ -74,10 +69,7 @@ test('should edit expenses from firebase', (done) => {
         });
         return database.ref(`expenses/${id}`).once('value');
     }).then((snapshot) => {
-        expect(snapshot.val()).toEqual({
-            id,
-            ...updates
-        });
+        expect(snapshot.val().amount).toBe(updates.amount);
         done();
     });
 });
